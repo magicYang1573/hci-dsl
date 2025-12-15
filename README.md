@@ -3,12 +3,12 @@
 Minimal DSL to describe a chiplet platform in Python (`conf.py`) and emit a Lua config (`conf.lua`) that can be consumed directly by QBox for co-simulation with QEMU-based platforms.
 
 ## Quick start
-1) Edit `conf.py` using the DSL types in `chiplet_dsl.py` (see the existing example).
-2) Run the translator:
-   ```bash
-   python main.py --input conf.py --output conf.lua
-   ```
-3) Consume the generated `conf.lua` in your simulator.
+1) Open `mvp_chiplet_case.py` and build a `ChipletPlatform` named `platform` using the configs in `chiplet_dsl.py` (the repo ships a minimal example).
+2) Translate to Lua:
+  ```bash
+  python mvp_chiplet_case.py --output mvp_chiplet_conf.lua
+  ```
+3) Use the emitted `mvp_chiplet_conf.lua` directly in QBox/QEMU co-sim.
 
 ## DSL recap
 - Construct `ChipletPlatform(name)`.
@@ -17,10 +17,9 @@ Minimal DSL to describe a chiplet platform in Python (`conf.py`) and emit a Lua 
   - `PeripheralConfig`
   - `DRAMConfig`
 - (Optional) Connect modules with `connect_modules(src, dst, connection_type="UCIe")`.
-- Call `generate_configuration(path)` (or run `main.py`) to produce Lua.
+- Call `generate_configuration(path)` to produce Lua.
 
 ## Notes
-- Default addresses/IRQs are assigned for UART, VADD, GPU, SENSOR; others auto-increment bases/IRQs.
-- Loader entries default to bootstub and demo ELF; adjust in `CPUConfig.loader_entries` if needed.
-- Lua output mirrors the example `conf.lua` layout in this repo.
-- Generated Lua is ready to drop into QBox: QemuInstance/Router/PLIC/CLINT/bridges are emitted with bindings consistent with the sample platform.
+- Current supports: UART, VADD, GPU, SENSOR (addresses/IRQs/URIs); automatically generate auto-incremented bases/IRQs.
+- Loader entries default to bootstub + demo ELF; tweak `CPUConfig.loader_entries` to point at your firmware images.
+- The generated Lua matches the structure of the provided `mvp_chiplet_ref.lua` (Container, QemuInstance, router, boot ROM, CLINT, PLIC, reset, loader, peripherals, DRAM) and is ready for QBox.
