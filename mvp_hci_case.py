@@ -1,8 +1,8 @@
-# Chiplet DSL case for MVP platform
+# hci DSL case for MVP platform
 
-from chiplet_dsl import *
+from hci_dsl import *
 
-platform = ChipletPlatform("MVP")
+platform = hciPlatform("MVP")
 
 cpu_config = CPUConfig(isa="riscv64")
 platform.add_module("CPU", cpu_config)
@@ -28,4 +28,4 @@ platform.connect_modules("CPU", "GPU", connection_type="UCIe")
 platform.connect_modules("CPU", "SENSOR", connection_type="UCIe")
 platform.connect_modules("CPU", "DRAM", connection_type="DDR5")
 
-platform.generate_configuration("mvp_chiplet_config.lua")
+platform.generate_configuration("mvp_hci_config.lua")
